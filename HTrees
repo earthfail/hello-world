@@ -39,6 +39,7 @@ namespace experiments
         public List<Tree<T>> Sons { get; set;}
         //some features
         enum code { PIPE, TAP, TIP };
+
         
         public static void prtbranch(Stack<int> s)
         {
@@ -99,44 +100,48 @@ namespace experiments
             prttree(this, branch, len);
 
         }
-    }
-    class Program
-    {
-        public static void insertTree(Tree<int> t,int layer)
+        public delegate T ReadFather(string f);
+        public void insertTree(Tree<T> t, int layer,ReadFather R)
         {
-            Console.Write("insert value for father{0}:",layer);
-            t.Father = int.Parse(Console.ReadLine());
-            Console.Write("want sons for this father{0}(y/n)? ",layer);
+            
+            Console.Write("insert value for father{0}:", layer);
+            t.Father = R(Console.ReadLine());
+            Console.Write("want sons for this father{0}(y/n)? ", layer);
             if (char.Parse(Console.ReadLine()).CompareTo('n') == 0)
                 return; //no more insertion
             else
             {
-                Node<Tree<int>> p;//to move through list and make sons
+                Node<Tree<T>> p;//to move through list and make sons
                 char ans;//saves the answer from user
-                t.Sons = new List<Tree<int>>();
-                t.Sons.First = new Node<Tree<int>>();
-                t.Sons.First.Info = new Tree<int>();
+                t.Sons = new List<Tree<T>>();
+                t.Sons.First = new Node<Tree<T>>();
+                t.Sons.First.Info = new Tree<T>();
                 p = t.Sons.First;
-                insertTree(t.Sons.First.Info,layer+1);
+                insertTree(t.Sons.First.Info, layer + 1,R);
                 do
                 {
-                    Console.Write("another son for father{0}(y/n)? ",layer);
+                    Console.Write("another son for father{0}(y/n)? ", layer);
                     ans = char.Parse(Console.ReadLine());
                     if (ans.CompareTo('y') == 0)
                     {
-                        p.Next = new Node<Tree<int>>();
-                        p.Next.Info = new Tree<int>();
-                        insertTree(p.Next.Info,layer+1);
+                        p.Next = new Node<Tree<T>>();
+                        p.Next.Info = new Tree<T>();
+                        insertTree(p.Next.Info, layer + 1,R);
                         p = p.Next;
                     }
                 } while (ans.CompareTo('y') == 0);
 
             }
         }
+    }
+    class Program
+    {
+       static int intem(string s) { return int.Parse(s); }
         static void Main(string[] args)
         {
             Tree<int> a0 = new Tree<int>();
-            insertTree(a0, 0);
+            Tree<int>.ReadFather func = new Tree<int>.ReadFather(intem);
+            a0.insertTree(a0, 0,func);
             Console.WriteLine();
             a0.prttree(3);
             Console.ReadLine();

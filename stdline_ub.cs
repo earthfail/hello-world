@@ -163,7 +163,7 @@ using System.Text;
 //        public Node<T> Right { get; set; }
 //        public BinNode() { Value = null; Left = null; Right = null; }
 //        public bool IsLeaf() { return (Left == null) && (Right == null); }
-//        public bool HasLeft() { return !(Right == null); }
+//        public bool HasLeft() { return !(Left == null); }
 //        public bool HasRight() { return !(Right == null); }
 //    }
 //}
